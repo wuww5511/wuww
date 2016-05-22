@@ -1,0 +1,5 @@
+#!/usr/bin/env node
+
+var _index = require('../index');
+
+_index.arWatch(3000);
