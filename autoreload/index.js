@@ -15,16 +15,33 @@ var _gulp = require('gulp'),
     _concat = require('gulp-concat');
 var _path = require('path');
 
-module.exports = function (_p) {
+module.exports = _watch;
+
+function _watch (_p) {
     _port = _p || 3000;
     
     _server.listen(_port);
     
     console.log('listen on ' + _port);
     
+    _gulp.watch(['**/*.css',
+                 '**/*.js', 
+                 '**/*.ftl', 
+                 '**/*.html', 
+                 '**/*.ejs'], 
+                function () {
+                    _event.emit('change');
+                }
+    );
+    
+    console.log('watch files');
+    
     console.log("<script src='http://localhost:" + _port + "/public/dist/reload.js'></script>")
-    _compress();
 };
+
+_watch.compress = function () {
+    _compress();
+}
 
 var _event = new Event();
 
@@ -37,11 +54,6 @@ var _io = require('socket.io')(_server);
 _io.on('connection', _onConnection);
 
 _app.use('/public', _express.static(_path.join(__dirname, 'public')));
-
-_gulp.watch(['**/*.css', '**/*.js', '**/*.ftl', '**/*.html', '**/*.ejs'], function () {
-    _event.emit('change');
-});
-
 
 
 
@@ -61,7 +73,7 @@ function _onConnection (_socket) {
 }
 
 function _compress () {
-    
+    console.log('begin:');
     var _arr = [];
     
     _arr.push(_path.join(__dirname, './public/src') + "/socket.io.js");
@@ -70,4 +82,6 @@ function _compress () {
     _gulp.src(_arr)
         .pipe(_concat('reload.js'))
         .pipe(_gulp.dest(_path.join(__dirname, './public/dist/')));
+    
+    console.log('end!')
 }
