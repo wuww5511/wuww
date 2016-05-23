@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "bin": {
-    "wuww-reload": "./bin/reload"
+    "wuww": "./bin/reload"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
