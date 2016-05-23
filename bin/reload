@@ -2,4 +2,4 @@
 
 var _index = require('../index');
 
-_index.arWatch(3000);
+_index.arWatch(process.argv[2] || 3000);

@@ -7,33 +7,38 @@
  ***/
 var _express = require('express');
 var _app = _express();
-var _server = require('http').createServer(_app);
+var _server = require('http').createServer(_app),
+    _gulp = require('gulp');
 
 var Event = require('events');
-var _gulp = require('gulp');
+var _gulp = require('gulp'),
+    _concat = require('gulp-concat');
 var _path = require('path');
 
-module.exports = function (_port) {
-    _server.listen(_port || 3000);
+module.exports = function (_p) {
+    _port = _p || 3000;
+    
+    _server.listen(_port);
+    
+    console.log('listen on ' + _port);
+    
+    console.log("<script src='http://localhost:" + _port + "/public/dist/reload.js'></script>")
+    _compress();
 };
 
 var _event = new Event();
 
-_app.use('/public', _express.static(_path.join(__dirname, 'public')));
+var _port = 0;
 
-_app.use('/', function (_req, _res, _next) {
-    
-   _res.write("<script src='http://localhost:3000/public/src/socket.io.js'></script>");
-    _res.write("<script src='http://localhost:3000/public/src/main.js'></script>");
-    _res.end();
-});
+var _target = "";
 
 var _io = require('socket.io')(_server);
 
 _io.on('connection', _onConnection);
 
+_app.use('/public', _express.static(_path.join(__dirname, 'public')));
 
-_gulp.watch('**', function () {
+_gulp.watch(['**/*.css', '**/*.js', '**/*.ftl', '**/*.html', '**/*.ejs'], function () {
     _event.emit('change');
 });
 
@@ -53,4 +58,16 @@ function _onConnection (_socket) {
     _socket.on('discount', function () {
         _event.removeListener('change', _onChange);
     });
+}
+
+function _compress () {
+    
+    var _arr = [];
+    
+    _arr.push(_path.join(__dirname, './public/src') + "/socket.io.js");
+    _arr.push(_path.join(__dirname, './public/src') + "/main.js");
+    
+    _gulp.src(_arr)
+        .pipe(_concat('reload.js'))
+        .pipe(_gulp.dest(_path.join(__dirname, './public/dist/')));
 }
