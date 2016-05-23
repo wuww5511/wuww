@@ -1,0 +1,9 @@
+#!/usr/bin/env node
+
+var _getFtlView = require('../index').getFtlView;
+
+var _view = _getFtlView(process.cwd());
+
+_view._$render(process.argv[2], {}, function (_err, _html) {
+    console.log(_err || _html);
+});
