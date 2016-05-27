@@ -81,7 +81,7 @@ function _compress () {
     
     _gulp.src(_arr)
         .pipe(_concat('reload.js'))
-        .pipe(_gulp.dest(_path.join(__dirname, './public/dist/')));
+        .pipe(_gulp.dest(_path.join(__dirname, '../public')));
     
     console.log('end!')
 }
