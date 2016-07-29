@@ -30,6 +30,8 @@ _app.use(/\S+\.ftl/, _ftlRouter);
 
 _app.use(_pathRouter);
 
+_app.use('/', _express.static(_path.join(process.cwd(), "../../")));
+
 _gulp.watch([
     '**'
 ], function () {

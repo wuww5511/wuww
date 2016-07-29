@@ -11,10 +11,40 @@ for(var _i = 0; _i < _scripts.length; _i++) {
     }
 }
 
-console.log(_url);
-
 var _socket = io(_url);
     
 _socket.on('reload', function () {
-    location.reload(true);
+    _delayReload();
 });
+
+var _reloadHandle = null,
+    _onlyCss = true;
+
+function _delayReload (_isCss) {
+    if(!_isCss) _onlyCss = false;
+    if(_reloadHandle) return;
+    _reloadHandle = setTimeout(function () {
+        _reload(_onlyCss);
+        _reloadHandle = null;
+        _onlyCss = true;
+    }, 500);
+}
+
+function _reload (_onlyCss) {
+    if(_onlyCss) {
+        _reloadCss();
+        return;
+    }
+    location.reload();
+}
+
+function _reloadCss () {
+    var _links = document.getElementsByTagName('link');
+    for(var _i = 0; _i < _links.length; _i++) {
+        var _href = _links[_i].getAttribute('href');
+        if(_href) {
+            var _realHref = _href.split('?')[0];
+            _links[_i].setAttribute('href', _realHref + "?timestamp=" + (+new Date()));
+        }
+    }
+}
