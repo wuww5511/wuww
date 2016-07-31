@@ -1,0 +1,1 @@
+supervisor -w ../server2 --debug  ../server2/index

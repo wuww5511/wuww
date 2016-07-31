@@ -14,6 +14,7 @@ for(var _i = 0; _i < _scripts.length; _i++) {
 var _socket = io(_url);
     
 _socket.on('reload', function () {
+    console.log('reload');
     _delayReload();
 });
 
