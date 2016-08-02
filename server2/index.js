@@ -2,7 +2,8 @@ var _express = require('express'),
     _app = _express(),
     _path = require('path'),
     _server = require('http').createServer(_app),
-    _io = require('./routes/io');
+    _io = require('./routes/io'),
+    _others = require('./routes/others');
 
 var _ftlRouter = require('./routes/ftl');
 
@@ -16,12 +17,7 @@ _io(_server);
 
 _app.use(_ftlRouter);
 
-try{
-   _app.use(require(_path.join(process.cwd(), "./routes/index"))); 
-}
-catch(_e) {
-    console.warn(_e.message);
-}
+_app.use(_others);
 
 _server.listen(3000);
 

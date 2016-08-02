@@ -1,6 +1,6 @@
 "use strict"
 
-var _ftl = require('express-freemarker');
+var _ftl = require('./fm');
 
 
 class View {

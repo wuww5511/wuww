@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="/public/a.css">
 </head>
 <body>
-  lalal 
-  ${title} sf
+  ${title} template
    <script>
        var c1 = "汉字";
        var c2 = "${title}";
